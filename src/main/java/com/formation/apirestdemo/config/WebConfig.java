@@ -4,9 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Enregistrement des intercepteurs dans Spring MVC (ils sont injectés par constructeur).
- */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -20,7 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // Enregistré en premier : il mesure aussi les requêtes refusées par la clé
         registry.addInterceptor(dureeInterceptor)
                 .addPathPatterns("/api/**"); // uniquement les routes de l'API
         registry.addInterceptor(cleApiInterceptor)

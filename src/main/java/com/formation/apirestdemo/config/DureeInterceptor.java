@@ -5,9 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-/**
- * Intercepteur qui mesure la durée de traitement de chaque requête.
- */
 @Component
 public class DureeInterceptor implements HandlerInterceptor {
 

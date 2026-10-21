@@ -21,8 +21,7 @@ public class ProduitService {
     private final NotificationService notificationService;
     /**
      * Injection de dépendance par constructeur.
-     * Spring injecte le ProduitRepository et, grâce à @Qualifier, l'implémentation console de NotificationService
-     * (sans @Qualifier ni @Primary, Spring trouve 2 candidats et refuse de démarrer).
+     * Spring injecte automatiquement le ProduitRepository.
      */
     public ProduitService(ProduitRepository produitRepository,
                           @Qualifier("consoleNotificationService") NotificationService notificationService) {
@@ -88,16 +87,9 @@ public class ProduitService {
     public List<Produit> rechercherParNom(String nom) {
         return produitRepository.findByNomContainingIgnoreCase(nom);
     }
-    /**
-     * Recherche multi-critères. Les paramètres null sont ignorés.
-     */
     public List<Produit> filtrer(String nom, Double prixMin, Double prixMax) {
         return produitRepository.filtrer(nom, prixMin, prixMax);
     }
-    /**
-     * Calcule les statistiques du catalogue.
-     * Les min/max valent null quand il n'y a aucun produit (sinon Infinity, invalide en JSON).
-     */
     public Map<String, Object> statistiques() {
         List<Produit> produits = produitRepository.findAll();
         DoubleSummaryStatistics prix = produits.stream()
@@ -107,20 +99,14 @@ public class ProduitService {
                 .mapToInt(p -> p.getStock() == null ? 0 : p.getStock())
                 .sum();
         boolean vide = prix.getCount() == 0;
-        // LinkedHashMap pour garder l'ordre des clés dans le JSON (et accepter null, contrairement à Map.of)
         Map<String, Object> stats = new LinkedHashMap<>();
         stats.put("nombreTotal", prix.getCount());
-        stats.put("prixMoyen", Math.round(prix.getAverage() * 100) / 100.0); // arrondi à 2 décimales
+        stats.put("prixMoyen", Math.round(prix.getAverage() * 100) / 100.0);
         stats.put("prixMin", vide ? null : prix.getMin());
         stats.put("prixMax", vide ? null : prix.getMax());
         stats.put("stockTotal", stockTotal);
         return stats;
     }
-    /**
-     * Ajoute une quantité au stock d'un produit (quantité négative = retrait).
-     * @return Optional vide si le produit n'existe pas.
-     * @throws ResponseStatusException 400 si le stock deviendrait négatif.
-     */
     public Optional<Produit> ajouterStock(Long id, int quantite) {
         return produitRepository.findById(id)
                 .map(produit -> {

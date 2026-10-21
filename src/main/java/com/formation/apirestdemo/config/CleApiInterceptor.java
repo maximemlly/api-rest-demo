@@ -5,9 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-/**
- * Intercepteur qui refuse les requêtes DELETE sans l'en-tête X-Api-Key: formation.
- */
 @Component
 public class CleApiInterceptor implements HandlerInterceptor {
 
@@ -19,8 +16,8 @@ public class CleApiInterceptor implements HandlerInterceptor {
                              Object handler) {
         if ("DELETE".equals(request.getMethod())
                 && !CLE_ATTENDUE.equals(request.getHeader(EN_TETE))) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
-            return false; // la requête s'arrête ici : le contrôleur n'est pas appelé
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
         }
         return true;
     }

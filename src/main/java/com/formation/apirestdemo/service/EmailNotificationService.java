@@ -1,8 +1,5 @@
 package com.formation.apirestdemo.service;
 import org.springframework.stereotype.Service;
-/**
- * Implémentation qui enverrait les notifications par e-mail.
- */
 @Service("emailNotification")
 public class EmailNotificationService implements NotificationService {
     @Override

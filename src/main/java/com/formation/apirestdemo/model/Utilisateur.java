@@ -8,59 +8,32 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-/**
- * Entité JPA représentant un utilisateur.
- * Chaque instance correspond à une ligne dans la table "utilisateurs".
- */
 @Entity
 @Table(name = "utilisateurs")
 public class Utilisateur {
-    /**
-     * Identifiant unique, généré automatiquement par la base de données.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    /**
-     * Nom de l'utilisateur. Ne peut pas être vide.
-     */
     @NotBlank(message = "Le nom est obligatoire")
     @Column(nullable = false)
     private String nom;
-    /**
-     * Prénom de l'utilisateur. Ne peut pas être vide.
-     */
     @NotBlank(message = "Le prénom est obligatoire")
     @Column(nullable = false)
     private String prenom;
-    /**
-     * Email de l'utilisateur. Obligatoire et unique en base.
-     */
     @NotBlank(message = "L'email est obligatoire")
     @Email(message = "L'email n'est pas valide")
     @Column(nullable = false, unique = true)
     private String email;
-    /**
-     * Âge de l'utilisateur. Doit être positif.
-     */
     @Positive(message = "L'âge doit être positif")
     private Integer age;
-// --- Constructeurs ---
-/**
- * Constructeur sans arguments (requis par JPA).
- */
-public Utilisateur() {
-}
-    /**
-     * Constructeur avec tous les champs (sauf l'id, généré automatiquement).
-     */
+    public Utilisateur() {
+    }
     public Utilisateur(String nom, String prenom, String email, Integer age) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.age = age;
     }
-    // --- Getters et Setters ---
     public Long getId() {
         return id;
     }

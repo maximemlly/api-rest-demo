@@ -27,10 +27,6 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
      * Équivalent SQL : SELECT * FROM produits WHERE prix <= ?
      */
     List<Produit> findByPrixLessThanEqual(Double prix);
-    /**
-     * Recherche multi-critères : chaque paramètre null est ignoré.
-     * Requête écrite en JPQL (on manipule l'entité Produit, pas la table).
-     */
     @Query("SELECT p FROM Produit p WHERE " +
            "(:nom IS NULL OR LOWER(p.nom) LIKE LOWER(CONCAT('%', :nom, '%'))) AND " +
            "(:prixMin IS NULL OR p.prix >= :prixMin) AND " +

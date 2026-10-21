@@ -20,10 +20,10 @@ class ProduitServiceTest {
     @Mock                    // faux repository, piloté par le test
     private ProduitRepository produitRepository;
 
-    @Mock                    // fausse notification : aucun message réellement envoyé
+    @Mock
     private NotificationService notificationService;
 
-    @InjectMocks             // vrai service, construit avec les deux mocks
+    @InjectMocks             // vrai service, construit avec le mock
     private ProduitService produitService;
 
     @Test
@@ -52,11 +52,10 @@ class ProduitServiceTest {
     @Test
     void creer_forceLIdANull_avantLaSauvegarde() {
         Produit produit = new Produit("Clavier", "Mécanique", 89.99, 10);
-        produit.setId(42L); // un client malin tente d'imposer un ID
+        produit.setId(42L);
 
         produitService.creer(produit);
 
-        // Le captor récupère l'objet réellement passé à save()
         ArgumentCaptor<Produit> captor = ArgumentCaptor.forClass(Produit.class);
         verify(produitRepository).save(captor.capture());
         assertThat(captor.getValue().getId()).isNull();

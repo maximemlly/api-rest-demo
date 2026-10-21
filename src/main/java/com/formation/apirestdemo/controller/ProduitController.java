@@ -77,29 +77,20 @@ public class ProduitController {
         List<Produit> resultats = produitService.rechercherParNom(nom);
         return ResponseEntity.ok(resultats);
     }
-    // ============================================================
-// GET /api/v1/produits/filtrer?prixMin=10&prixMax=100&nom=clavier — Recherche multi-critères
-// ============================================================
     @GetMapping("/filtrer")
     public ResponseEntity<List<Produit>> filtrer(@RequestParam(required = false) String nom,
                                                  @RequestParam(required = false) Double prixMin,
                                                  @RequestParam(required = false) Double prixMax) {
         return ResponseEntity.ok(produitService.filtrer(nom, prixMin, prixMax));
     }
-    // ============================================================
-// GET /api/v1/produits/statistiques — Statistiques du catalogue
-// ============================================================
     @GetMapping("/statistiques")
     public ResponseEntity<Map<String, Object>> statistiques() {
         return ResponseEntity.ok(produitService.statistiques());
     }
-    // ============================================================
-// PATCH /api/v1/produits/{id}/stock?quantite=10 — Ajouter au stock
-// ============================================================
     @PatchMapping("/{id}/stock")
     public ResponseEntity<Produit> ajouterStock(@PathVariable Long id, @RequestParam int quantite) {
         return produitService.ajouterStock(id, quantite)
-                .map(ResponseEntity::ok) // 200 OK si mis à jour
-                .orElse(ResponseEntity.notFound().build()); // 404 si non trouvé
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
